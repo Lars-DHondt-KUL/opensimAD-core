@@ -155,7 +155,9 @@ if(BUILD_EXTERNAL_FUNCTIONS)
     add_subdirectory(TestLai)  
 	
 	add_subdirectory(AcrobotPlanar)
-    
+	add_subdirectory(testChair)
+	add_subdirectory(Hamner_modified)
+	
 endif()
 
 
