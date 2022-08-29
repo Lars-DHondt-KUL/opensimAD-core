@@ -16,10 +16,18 @@ foreach(dir ${SIMULATION_SUBDIRS})
     list(APPEND INCLUDES ${INCLUDES_ONEDIR})
 endforeach()
 
+set(OpenSim_LIBRARIES_TO_USE)
+if (WITH_RECORDER)
+	list(APPEND OpenSim_LIBRARIES_TO_USE osimCommon_recorder)
+else ()
+	list(APPEND OpenSim_LIBRARIES_TO_USE osimCommon)
+	list(APPEND OpenSim_LIBRARIES_TO_USE osimLepton)
+endif()
+
 OpenSimAddLibrary(
     KIT Simulation
     AUTHORS "Ajay_Seth-Michael_Sherman-Ayman_Habib"
-    LINKLIBS ${Simbody_LIBRARIES_TO_USE} osimCommon osimLepton
+	LINKLIBS ${Simbody_LIBRARIES_TO_USE} ${OpenSim_LIBRARIES_TO_USE}
     INCLUDES ${INCLUDES}
     SOURCES ${SOURCES}
     TESTDIRS SimbodyEngine Test

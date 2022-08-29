@@ -21,6 +21,11 @@ OpenSimAddLibrary(
     )
 
 if(WIN32)
-    add_dependencies(osimCommon Simbody_CONFIG_check)
+	if (WITH_RECORDER)
+		add_dependencies(osimCommon_recorder Simbody_CONFIG_check)
+	else ()
+		add_dependencies(osimCommon Simbody_CONFIG_check)
+	endif()
+    
 endif()
   
