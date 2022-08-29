@@ -45,7 +45,11 @@ function(OpenSimAddLibrary)
 
     # Version stuff.
     # --------------
-    set(OSIMADDLIB_LIBRARY_NAME osim${OSIMADDLIB_KIT})
+	if (WITH_RECORDER)
+		set(OSIMADDLIB_LIBRARY_NAME osim${OSIMADDLIB_KIT}_recorder)
+	else ()
+		set(OSIMADDLIB_LIBRARY_NAME osim${OSIMADDLIB_KIT})
+	endif()
 
     add_definitions(
         -DOPENSIM_${OSIMADDLIB_UKIT}_LIBRARY_NAME=${OSIMADDLIB_LIBRARY_NAME}
