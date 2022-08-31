@@ -509,7 +509,7 @@ namespace OpenSim {
 		DataTable<double, Vec3>       | Vec3         | 3
 		DataTable<double, Quaternion> | Quaternion   | 4                          */
 		unsigned numComponentsPerElement() const override {
-			return numComponentsPerElement_impl(ETY{});
+			return numComponentsPerElement_impl(ETY{}.getValue());
 		}
 
 		/// @name Row accessors/mutators.
@@ -1507,7 +1507,7 @@ namespace OpenSim {
 		}
 
 		static constexpr
-			unsigned numComponentsPerElement_impl(osim_double_adouble) {
+			unsigned numComponentsPerElement_impl(osim_double) {
 			return 1;
 		}
 		template<int M>

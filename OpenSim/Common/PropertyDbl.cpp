@@ -188,7 +188,7 @@ toString() const
 {
     if (SimTK::isFinite(_value)) {
         char dbl[256];
-        sprintf(dbl, "%g", _value);
+        sprintf(dbl, "%g", _value.getValue());
         return dbl;
     }
 

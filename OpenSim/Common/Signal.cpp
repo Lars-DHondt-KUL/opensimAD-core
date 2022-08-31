@@ -130,8 +130,8 @@ SmoothSpline(int degree,osim_double_adouble T,osim_double_adouble fc,int N,osim_
     //cout << "Requested smoothing parameter = " << p << endl;
     //cout << "Actual smoothing parameter    = " << pActual << endl;
     if(p!=pActual) {
-        printf("Signal.SmoothSpline:  ERROR- The cutoff frequency (%lf)",fc);
-        printf(" produced a smoothing parameter (%le) beyond its bound (%le).\n",p,pActual);
+        printf("Signal.SmoothSpline:  ERROR- The cutoff frequency (%lf)",fc.getValue());
+        printf(" produced a smoothing parameter (%le) beyond its bound (%le).\n",p.getValue(),pActual.getValue());
         return(-1);
     }
 
@@ -176,7 +176,7 @@ osim_double_adouble *sigr;
         printf("\nCutoff frequency should be less than half sample frequency.");
         printf("\nchanging the cutoff frequency to 0.49*(Sample Frequency)...");
         fc = 0.49 * fs;
-        printf("\ncutoff = %lf\n\n",fc);
+        printf("\ncutoff = %lf\n\n",fc.getValue());
     }
 
     // INITIALIZE SOME VARIABLES

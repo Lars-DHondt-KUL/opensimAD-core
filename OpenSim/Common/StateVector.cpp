@@ -545,7 +545,7 @@ print(FILE *fp) const
     char format[IO_STRLEN];
     sprintf(format,"%s",IO::GetDoubleOutputFormat());
     int n=0,nTotal=0;
-    n = fprintf(fp,format,_t);
+    n = fprintf(fp,format,_t.getValue());
     if(n<0) {
         printf("StateVector.print(FILE*): error writing to file.\n");
         return(n);
@@ -555,7 +555,7 @@ print(FILE *fp) const
     // STATES
     sprintf(format,"\t%s",IO::GetDoubleOutputFormat());
     for(int i=0;i<_data.getSize();i++) {
-        n = fprintf(fp,format,_data[i]);
+        n = fprintf(fp,format,_data[i].getValue());
         if(n<0) {
             printf("StateVector.print(FILE*): error writing to file.\n");
             return(n);
