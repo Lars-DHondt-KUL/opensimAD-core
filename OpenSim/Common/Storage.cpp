@@ -2866,7 +2866,7 @@ writeSIMMHeader(FILE *rFP,osim_double_adouble aDT, const char *aComment) const
     fprintf(rFP,"otherdata 1\n");
 
     // RANGE
-    fprintf(rFP,"range %lf %lf\n",getFirstTime(),getLastTime());
+    fprintf(rFP,"range %lf %lf\n",getFirstTime().getValue(),getLastTime().getValue());
     
     // Other data from the map
     MapKeysToValues::const_iterator iter;

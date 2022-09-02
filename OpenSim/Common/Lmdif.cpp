@@ -1810,7 +1810,7 @@ void pmat(int m, int n, osim_double_adouble y[])
       for (j=0; j<n; j++)
       {
          //  printf( "%.5e ", y[k] );
-         printf("%.6f  ", y[k]);
+         printf("%.6f  ", y[k].getValue());
          k += 1;
       }
       printf( "\n" );

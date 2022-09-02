@@ -228,7 +228,7 @@ toString() const
     char pad[256];
     osim_double_adouble rawData[6];
     getRotationsAndTranslationsAsArray6(rawData);
-    sprintf(pad, "%g %g %g %g %g %g", rawData[0], rawData[1], rawData[2], rawData[3], rawData[4], rawData[5]);
+    sprintf(pad, "%g %g %g %g %g %g", rawData[0].getValue(), rawData[1].getValue(), rawData[2].getValue(), rawData[3].getValue(), rawData[4].getValue(), rawData[5].getValue());
     str += string(pad);
     str += ")";
     return str;
