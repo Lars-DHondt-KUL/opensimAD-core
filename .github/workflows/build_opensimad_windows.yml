@@ -21,13 +21,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: AD-recorder-matpy  # Ensure the correct branch is checked out
+          ref: AD-recorder-matpy
+
+      - name: Install Visual Studio 2022 with C++ workload
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
 
       - name: Configure and build dependencies
         run: |
           mkdir -p ${{ env.OPENSIMADE_DEPENDENCIES_BUILD }}
           cd ${{ env.OPENSIMADE_DEPENDENCIES_BUILD }}
-          cmake -G "Visual Studio 16 2019" -A x64 `
+          cmake -G "Visual Studio 17 2022" -A x64 `
                 -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMADE_DEPENDENCIES_INSTALL }} `
                 ${{ github.workspace }}/dependencies
           cmake --build . --config RelWithDebInfo
@@ -36,7 +41,7 @@ jobs:
         run: |
           mkdir -p ${{ env.OPENSIMADE_CORE_BUILD }}
           cd ${{ env.OPENSIMADE_CORE_BUILD }}
-          cmake -G "Visual Studio 16 2019" -A x64 `
+          cmake -G "Visual Studio 17 2022" -A x64 `
                 -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMADE_CORE_INSTALL }} `
                 -DOPENSIM_DEPENDENCIES_DIR=${{ env.OPENSIMADE_DEPENDENCIES_INSTALL }} `
                 -DWITH_RECORDER=ON `
@@ -52,4 +57,3 @@ jobs:
           cd ${{ env.OPENSIMADE_CORE_BUILD }}
           cmake --build . --config RelWithDebInfo
           cmake --install . --config RelWithDebInfo
-
