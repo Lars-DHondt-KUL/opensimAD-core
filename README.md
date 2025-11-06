@@ -83,11 +83,11 @@ On Windows using Visual Studio
 #### Download OpenSim's source code modified to enable the use of algorithmic differentiation (OpenSim-AD-Core)
 
 * Clone the opensim-ad-core git repository. We'll assume you clone it into `C:/opensim-ad/opensim-ad-core`.
-  **Be careful that the repository is not on the `master` branch but on the `AD-recorder` branch.** 
+  **Be careful that the repository is not on the `master` branch but on the `AD-recorder-matpy` branch.** 
 
   Run the following in the command prompt :
   
-        git clone -b AD-recorder https://github.com/antoinefalisse/opensim-core.git C:/opensim-ad/opensim-ad-core  
+        git clone -b AD-recorder-matpy https://github.com/Lars-DHondt-KUL/opensimAD-core.git C:/opensim-ad/opensim-ad-core  
 
 #### [RECOMMENDED] Superbuild: download and build OpenSim dependencies
 1. Open the CMake GUI.
@@ -174,74 +174,11 @@ On Windows using Visual Studio
 8. Click the **Configure** button again. Then, click **Generate** to make
    Visual Studio project files in the build directory.
 
-#### Build
+9. Go to Open `C:/opensim-ad/opensim-ad-core-build/` 
 
-1. Open `C:/opensim-ad/opensim-ad-core-build/OpenSim.sln` in Visual Studio.
-2. Select your desired *Solution configuration* from the drop-down at the top (we recommend **RelWithDebInfo** for consistency with the dependencies).
-    * **Debug**: debugger symbols; no optimizations (more than 10x slower).
-      Library names end with `_d`.
-    * **Release**: no debugger symbols; optimized.
-    * **RelWithDebInfo**: debugger symbols; optimized. Bigger but not slower
-      than Release; choose this if unsure.
-    * **MinSizeRel**: minimum size; optimized.
+10. Use CMake to compile, and install the software:
 
-    You at least want release libraries (the last 3 count as release), but you
-    can have debug libraries coexist with them. To do this, go through the
-    installation process twice, once for each of the two configurations. You
-    should install the release configuration *last* to ensure that you use the
-    release version of the command-line applications instead of the slow debug
-    versions.
-4. Build the libraries. **For our applications, we only need to build osimCommon and osimSimulation, building all libraries will fail.** 
-   Right-click on osimCommon in the folder Libraries and select **Build**. Process in the same way for osimSimulation.
-5. Copy Simbody DLLs. Right-click on Copy Simbody DLLs and select **Build**.
-   
-Build external functions
-------------------------
+        cmake --build . --config RelWithDebInfo
 
-In the folder **OpenSim/External_Functions**, you can find a series of example external functions we used for different applications. To add your own external
-function, take a look at an example and read the instructions in the Readme file. Don't forget to edit the CMakeLists. Your new external function
-will appear in Visual Studio under External_Functions after re-configuring with CMake. For the rest of the instructions, we will use the example **PredSim_v2**.
+ 
 
-1. Build the external function. Right-click on PredSim_v2 and select **Build**. To skip the next step ([Run executable](#run-executable)), you can also right-click on PredSim_v2, select **Set as StartUp Project**, click on Debug (toolbar) and click on **Start Without Debugging**. If you followed the second approach, you should find
-a MATLAB file `foo.m` in the folder `C:/opensim-ad/opensim-ad-core-build/OpenSim/External_Functions/PredSim_v2`.
-
-Run executable
---------------
-
-If you haven't run the executable yet (e.g., through **Start Without Debugging**):
-1. Open `C:/opensim-ad/opensim-ad-core-build/RelWithDebInfo` through the command prompt (assuming you are in RelWithDebInfo mode):
-
-        cd C:/opensim-ad/opensim-ad-core-build/RelWithDebInfo
-    
-2. Run the executable by typing the following in the command prompt:
-
-        PredSim_v2.exe
-    
-You should find a MATLAB file `foo.m` in the folder `C:/opensim-ad/opensim-ad-core-build/RelWithDebInfo`.
-
-Compile external function into dll
-----------------------------------
-
-1. Follow the instructions in the Readme file in **cgeneration** and run the `generate_dll.ps1` Powershell script after adjusting the paths.        
-2. You should find a file `PredSim_v2.dll` in `<path_external_functions_in_generate_dll>/external_functions/PredSim_v2/install/bin`.
-3. Re-run the different steps ([Build external functions](#build-external-functions), potentially [Run executable](#run-executable), and [Compile external function into dll](#compile-external-function-into-dll)) but this time for PredSim_v2_pp (this is a different external function).
-
-Formulate and solve trajectory optimization problems
-----------------------------------------------------
-
-With the libraries `PredSim_v2.dll` and `PredSim_v2_pp.dll`, you have all your need to formulate and solve your trajectory optimization problem
-and generate a predictive simulation of walking such as in the animation above.
-
-Clone the [3dpredictsim git repository](https://github.com/antoinefalisse/3dpredictsim). We'll assume you clone it into `C:/3dpredictsim`. 
-  
-        git clone https://github.com/antoinefalisse/3dpredictsim.git C:/3dpredictsim 
-        
-In `C:/3dpredictsim/ExternalFunctions`, you can see that you already have the libraries `PredSim_v2.dll` and `PredSim_v2_pp.dll`. If you want to make
-sure that you performed all the steps above correctly, delete those libraries and copy the ones you created before.
-
-Run the script `C:/3dpredictsim/OCP/PredSim_v2_all.m`. It should converge in about 680 iterations (Windows 10, MATLAB2019b) and less than one hour (depending on your machine).
-Open the OpenSim GUI, select the model `C:/3dpredictsim/OpenSimModel/subject1/subject1_v2.osim` and load the motion file `C:/3dpredictsim/Results/PredSim_all_v2/IK_c22.mot` (this file has been generated after solving the optimization problem and processing the results).
-
-Congrats, you generated a three-dimensional muscle-driven predictive simulation of walking!
-
-Please report any problems you encountered by creating an issue on this page, thanks.
