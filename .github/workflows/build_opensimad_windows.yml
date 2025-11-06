@@ -1,16 +1,17 @@
 name: Build OpenSimAD
 
 on:
+  push:
+    branches: [ main, AD-recorder-matpy ]
+  pull_request:
+    branches: [ main, AD-recorder-matpy ]
   workflow_dispatch:
 
 env:
-  OPENSIMAD_SOURCE: C:/opensim-ad/opensim-ad-core
-  OPENSIMAD_DEPENDENCIES_BUILD: C:/opensim-ad/opensim-ad-dependencies/opensim-ad-dependencies-build
-  OPENSIMAD_DEPENDENCIES_INSTALL: C:/opensim-ad/opensim-ad-dependencies/opensim-ad-dependencies-install
-  OPENSIMAD_CORE_BUILD: C:/opensim-ad/opensim-ad-core-build
-  OPENSIMAD_CORE_INSTALL: C:/opensim-ad/opensim-ad-core-install
-  #CMAKE_GENERATOR: "Visual Studio 15 2017 Win64"
-  BUILD_CONFIG: RelWithDebInfo
+  OPENSIMADE_DEPENDENCIES_BUILD: ${{ github.workspace }}/opensim-ad-dependencies-build
+  OPENSIMADE_DEPENDENCIES_INSTALL: ${{ github.workspace }}/opensim-ad-dependencies-install
+  OPENSIMADE_CORE_BUILD: ${{ github.workspace }}/opensim-ad-core-build
+  OPENSIMADE_CORE_INSTALL: ${{ github.workspace }}/opensim-ad-core-install
 
 jobs:
   build:
@@ -19,35 +20,36 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Clone OpenSimAD-Core
-        run: |
-          git clone -b AD-recorder-matpy https://github.com/Lars-DHondt-KUL/opensimAD-core.git ${{ env.OPENSIMAD_SOURCE }}
+        with:
+          ref: AD-recorder-matpy  # Ensure the correct branch is checked out
 
       - name: Configure and build dependencies
         run: |
-          mkdir -p ${{ env.OPENSIMAD_DEPENDENCIES_BUILD }}
-          cd ${{ env.OPENSIMAD_DEPENDENCIES_BUILD }}
-          cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMAD_DEPENDENCIES_INSTALL }} ${{ env.OPENSIMAD_SOURCE }}/dependencies
-          cmake --build . --config ${{ env.BUILD_CONFIG }}
+          mkdir -p ${{ env.OPENSIMADE_DEPENDENCIES_BUILD }}
+          cd ${{ env.OPENSIMADE_DEPENDENCIES_BUILD }}
+          cmake -G "Visual Studio 16 2019" -A x64 `
+                -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMADE_DEPENDENCIES_INSTALL }} `
+                ${{ github.workspace }}/dependencies
+          cmake --build . --config RelWithDebInfo
 
       - name: Configure OpenSim-AD-Core
         run: |
-          mkdir -p ${{ env.OPENSIMAD_CORE_BUILD }}
-          cd ${{ env.OPENSIMAD_CORE_BUILD }}
-          cmake -G "Visual Studio 15 2017 Win64" `
-                -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMAD_CORE_INSTALL }} `
-                -DOPENSIM_DEPENDENCIES_DIR=${{ env.OPENSIMAD_DEPENDENCIES_INSTALL }} `
+          mkdir -p ${{ env.OPENSIMADE_CORE_BUILD }}
+          cd ${{ env.OPENSIMADE_CORE_BUILD }}
+          cmake -G "Visual Studio 16 2019" -A x64 `
+                -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMADE_CORE_INSTALL }} `
+                -DOPENSIM_DEPENDENCIES_DIR=${{ env.OPENSIMADE_DEPENDENCIES_INSTALL }} `
                 -DWITH_RECORDER=ON `
-                -DBUILD_EXTERNAL_FUNCTIONS=OFF `
+                -DBUILD_EXTERNAL_FUNCTIONS=ON `
                 -DBUILD_API_EXAMPLES=OFF `
                 -DBUILD_TESTING=OFF `
                 -DBUILD_JAVA_WRAPPING=OFF `
                 -DBUILD_PYTHON_WRAPPING=OFF `
-                ${{ env.OPENSIMAD_SOURCE }}
+                ${{ github.workspace }}
 
-      - name: Build and install OpenSimAD-Core
+      - name: Build and install OpenSim-AD-Core
         run: |
-          cd ${{ env.OPENSIMAD_CORE_BUILD }}
-          cmake --build . --config ${{ env.BUILD_CONFIG }}
-          cmake --install . --config ${{ env.BUILD_CONFIG }}
+          cd ${{ env.OPENSIMADE_CORE_BUILD }}
+          cmake --build . --config RelWithDebInfo
+          cmake --install . --config RelWithDebInfo
+
