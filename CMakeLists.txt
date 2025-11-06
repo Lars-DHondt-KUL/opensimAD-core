@@ -109,7 +109,7 @@ mark_as_advanced(OPENSIM_PYTHON_STANDALONE) # Mainly for packagers; not users.
 option(BUILD_API_ONLY "Build/install only headers, libraries,
 wrapping, tests; not applications (opensim, ik, rra, etc.)." ON)
 
-option(WITH_RECORDER "Get the Simbody libraries build with Recorder" OFF)
+option(WITH_RECORDER "Get the Simbody libraries build with Recorder" ON)
 
 
 set(OPENSIM_BUILD_INDIVIDUAL_APPS_DEFAULT OFF)
