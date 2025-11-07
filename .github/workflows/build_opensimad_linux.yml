@@ -61,10 +61,12 @@ jobs:
           cd ${{ env.OPENSIMAD_CORE_BUILD }}
           cmake --build . --config Release
           cmake --install .
+          sync  # Ensure all files are written to disk (Linux only)
 
       - name: Archive Linux binaries
         run: |
           cd ${{ env.OPENSIMAD_CORE_INSTALL }}
+          sleep 5  # Add a small delay to ensure all files are written
           tar -czvf opensimad-install-linux.tar.gz .
 
       - name: Upload Linux binaries
