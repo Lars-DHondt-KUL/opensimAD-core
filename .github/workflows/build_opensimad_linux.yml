@@ -2,9 +2,9 @@ name: Build OpenSimAD (Linux)
 
 on:
   push:
-    branches: [ main, AD-recorder-matpy ]
+    branches: [ AD-recorder-matpy ]
   pull_request:
-    branches: [ main, AD-recorder-matpy ]
+    branches: [ AD-recorder-matpy ]
   workflow_dispatch:
 
 env:
@@ -23,12 +23,12 @@ jobs:
         with:
           ref: AD-recorder-matpy
 
-      - name: Install dependencies (Linux)
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y git cmake build-essential liblapack-dev
 
-      - name: Configure and build dependencies (Linux)
+      - name: Configure and build dependencies
         run: |
           mkdir -p ${{ env.OPENSIMADE_DEPENDENCIES_BUILD }}
           cd ${{ env.OPENSIMADE_DEPENDENCIES_BUILD }}
@@ -38,7 +38,7 @@ jobs:
           cmake --build . --config Release
           cmake --install .
 
-      - name: Configure OpenSim-AD-Core (Linux)
+      - name: Configure OpenSimAD-core
         run: |
           mkdir -p ${{ env.OPENSIMADE_CORE_BUILD }}
           mkdir -p ${{ env.OPENSIMADE_CORE_BUILD }}/Release
@@ -47,7 +47,7 @@ jobs:
                 -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMADE_CORE_INSTALL }} \
                 -DOPENSIM_DEPENDENCIES_DIR=${{ env.OPENSIMADE_DEPENDENCIES_INSTALL }} \
                 -DWITH_RECORDER=ON \
-                -DBUILD_EXTERNAL_FUNCTIONS=ON \
+                -DBUILD_EXTERNAL_FUNCTIONS=OFF \
                 -DBUILD_API_EXAMPLES=OFF \
                 -DBUILD_TESTING=OFF \
                 -DBUILD_JAVA_WRAPPING=OFF \
@@ -63,7 +63,7 @@ jobs:
       - name: Upload Linux binaries
         uses: actions/upload-artifact@v4
         with:
-          name: opensim-ad-core-linux
+          name: opensimad-core-linux
           path: ${{ env.OPENSIMADE_CORE_INSTALL }}
 
   

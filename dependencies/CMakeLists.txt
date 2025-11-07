@@ -141,28 +141,14 @@ SetDefaultCMakeBuildType()
 
 ####################### Add dependencies below.
 
-#AddDependency(NAME       BTK
-#              # URL        https://github.com/Biomechanical-ToolKit/BTKCore.git
-#              URL        https://github.com/opensim-org/BTKCore.git
-#              TAG        6d787d0be223851a8f454f2ee8c7d9e47b84cbbe
-#              CMAKE_ARGS -DBUILD_SHARED_LIBS:BOOL=ON)
-
 AddDependency(NAME       simbody
-              # URL        https://github.com/simbody/simbody.git
-              # # simbody-3.6 branch containing fixes for GCC-8 warnings
-              # TAG        45654969ef2cf34555bf388472b78bec08ede84f
               URL        https://github.com/Lars-DHondt-KUL/simbodyAD.git
-              TAG        0ed4cd87a3c5af98bd9bf5031090ff70021e359a
+              TAG        9b9a2f816bee44f1b18d0147c99c12b71ee97e3a
               CMAKE_ARGS -DBUILD_EXAMPLES:BOOL=OFF 
                          -DBUILD_TESTING:BOOL=OFF
 						 -DBUILD_DYNAMIC_LIBRARIES:BOOL=OFF
                          -DBUILD_VISUALIZER:BOOL=OFF
                          -DBUILD_RECORDER_LIBRARIES:BOOL=ON)
-                     
-
-#AddDependency(NAME       docopt
-#              URL        https://github.com/docopt/docopt.cpp.git
-#              TAG        af03fa044ee1eff20819549b534ea86829a24a54)
  
 #######################
 
