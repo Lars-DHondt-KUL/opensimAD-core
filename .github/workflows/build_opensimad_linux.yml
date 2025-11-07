@@ -61,7 +61,7 @@ jobs:
           cmake --install .
 
       - name: Upload Linux binaries
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: opensim-ad-core-linux
           path: ${{ env.OPENSIMADE_CORE_INSTALL }}
