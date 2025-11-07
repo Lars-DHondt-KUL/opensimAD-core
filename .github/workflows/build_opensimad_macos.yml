@@ -43,7 +43,7 @@ jobs:
                 -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMAD_CORE_INSTALL }} \
                 -DOPENSIM_DEPENDENCIES_DIR=${{ env.OPENSIMAD_DEPENDENCIES_INSTALL }} \
                 -DWITH_RECORDER=ON \
-                -DBUILD_EXTERNAL_FUNCTIONS=ON \
+                -DBUILD_EXTERNAL_FUNCTIONS=OFF \
                 -DBUILD_API_EXAMPLES=OFF \
                 -DBUILD_TESTING=OFF \
                 -DBUILD_JAVA_WRAPPING=OFF \
