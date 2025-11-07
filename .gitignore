@@ -9,6 +9,7 @@
 tmp
 # Ignore build trees.
 /build*
+!build_*.bat
 # Ignore install dir.
 install
 # Ignore settings from the CLion IDE (from JetBrains).

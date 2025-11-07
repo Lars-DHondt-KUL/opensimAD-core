@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
 
 env:
-  OPENSIMADE_SOURCE: ${{ github.workspace }}
-  OPENSIMADE_DEPENDENCIES_BUILD: ${{ github.workspace }}/opensim-ad-dependencies-build
-  OPENSIMADE_DEPENDENCIES_INSTALL: ${{ github.workspace }}/opensim-ad-dependencies-install
-  OPENSIMADE_CORE_BUILD: ${{ github.workspace }}/opensim-ad-core-build
-  OPENSIMADE_CORE_INSTALL: ${{ github.workspace }}/opensim-ad-core-install
+  OPENSIMAD_SOURCE: ${{ github.workspace }}
+  OPENSIMAD_DEPENDENCIES_BUILD: ${{ github.workspace }}/opensim-ad-dependencies-build
+  OPENSIMAD_DEPENDENCIES_INSTALL: ${{ github.workspace }}/opensim-ad-dependencies-install
+  OPENSIMAD_CORE_BUILD: ${{ github.workspace }}/opensim-ad-core-build
+  OPENSIMAD_CORE_INSTALL: ${{ github.workspace }}/opensim-ad-core-install
 
 jobs:
   build-macos:
@@ -19,39 +19,40 @@ jobs:
         with:
           ref: AD-recorder-matpy
 
-      - name: Install dependencies (macOS)
+      - name: Install dependencies
         run: |
           brew update
           brew install cmake lapack
 
-      - name: Configure and build dependencies (macOS)
+      - name: Configure and build dependencies
         run: |
-          mkdir -p ${{ env.OPENSIMADE_DEPENDENCIES_BUILD }}
-          cd ${{ env.OPENSIMADE_DEPENDENCIES_BUILD }}
+          mkdir -p ${{ env.OPENSIMAD_DEPENDENCIES_BUILD }}
+          cd ${{ env.OPENSIMAD_DEPENDENCIES_BUILD }}
           cmake -G "Unix Makefiles" \
-                -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMADE_DEPENDENCIES_INSTALL }} \
-                ${{ env.OPENSIMADE_SOURCE }}/dependencies
+                -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMAD_DEPENDENCIES_INSTALL }} \
+                ${{ env.OPENSIMAD_SOURCE }}/dependencies
           cmake --build . --config Release
           cmake --install .
 
-      - name: Configure OpenSim-AD-Core (macOS)
+      - name: Configure OpenSimAD-core
         run: |
-          mkdir -p ${{ env.OPENSIMADE_CORE_BUILD }}
-          cd ${{ env.OPENSIMADE_CORE_BUILD }}
+          mkdir -p ${{ env.OPENSIMAD_CORE_BUILD }}
+          mkdir -p ${{ env.OPENSIMAD_CORE_BUILD }}/Release
+          cd ${{ env.OPENSIMAD_CORE_BUILD }}
           cmake -G "Unix Makefiles" \
-                -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMADE_CORE_INSTALL }} \
-                -DOPENSIM_DEPENDENCIES_DIR=${{ env.OPENSIMADE_DEPENDENCIES_INSTALL }} \
+                -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMAD_CORE_INSTALL }} \
+                -DOPENSIM_DEPENDENCIES_DIR=${{ env.OPENSIMAD_DEPENDENCIES_INSTALL }} \
                 -DWITH_RECORDER=ON \
                 -DBUILD_EXTERNAL_FUNCTIONS=ON \
                 -DBUILD_API_EXAMPLES=OFF \
                 -DBUILD_TESTING=OFF \
                 -DBUILD_JAVA_WRAPPING=OFF \
                 -DBUILD_PYTHON_WRAPPING=OFF \
-                ${{ env.OPENSIMADE_SOURCE }}
+                ${{ env.OPENSIMAD_SOURCE }}
 
-      - name: Build and install OpenSim-AD-Core (macOS)
+      - name: Build and install OpenSimAD-core
         run: |
-          cd ${{ env.OPENSIMADE_CORE_BUILD }}
+          cd ${{ env.OPENSIMAD_CORE_BUILD }}
           cmake --build . --config Release
           cmake --install .
 
@@ -59,4 +60,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: opensim-ad-core-macos
-          path: ${{ env.OPENSIMADE_CORE_INSTALL }}
+          path: ${{ env.OPENSIMAD_CORE_INSTALL }}
