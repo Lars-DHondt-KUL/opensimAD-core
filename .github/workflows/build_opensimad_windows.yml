@@ -1,10 +1,6 @@
 name: Build OpenSimAD
 
 on:
-  push:
-    branches: [ main, AD-recorder-matpy ]
-  pull_request:
-    branches: [ main, AD-recorder-matpy ]
   workflow_dispatch:
 
 env:

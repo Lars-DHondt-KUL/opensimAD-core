@@ -1,0 +1,69 @@
+name: Build OpenSimAD (Linux)
+
+on:
+  push:
+    branches: [ main, AD-recorder-matpy ]
+  pull_request:
+    branches: [ main, AD-recorder-matpy ]
+  workflow_dispatch:
+
+env:
+  OPENSIMADE_SOURCE: ${{ github.workspace }}
+  OPENSIMADE_DEPENDENCIES_BUILD: ${{ github.workspace }}/opensim-ad-dependencies-build
+  OPENSIMADE_DEPENDENCIES_INSTALL: ${{ github.workspace }}/opensim-ad-dependencies-install
+  OPENSIMADE_CORE_BUILD: ${{ github.workspace }}/opensim-ad-core-build
+  OPENSIMADE_CORE_INSTALL: ${{ github.workspace }}/opensim-ad-core-install
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: AD-recorder-matpy
+
+      - name: Install dependencies (Linux)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git cmake build-essential liblapack-dev
+
+      - name: Configure and build dependencies (Linux)
+        run: |
+          mkdir -p ${{ env.OPENSIMADE_DEPENDENCIES_BUILD }}
+          cd ${{ env.OPENSIMADE_DEPENDENCIES_BUILD }}
+          cmake -G "Unix Makefiles" \
+                -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMADE_DEPENDENCIES_INSTALL }} \
+                ${{ env.OPENSIMADE_SOURCE }}/dependencies
+          cmake --build . --config Release
+          cmake --install .
+
+      - name: Configure OpenSim-AD-Core (Linux)
+        run: |
+          mkdir -p ${{ env.OPENSIMADE_CORE_BUILD }}
+          mkdir -p ${{ env.OPENSIMADE_CORE_BUILD }}/Release
+          cd ${{ env.OPENSIMADE_CORE_BUILD }}
+          cmake -G "Unix Makefiles" \
+                -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMADE_CORE_INSTALL }} \
+                -DOPENSIM_DEPENDENCIES_DIR=${{ env.OPENSIMADE_DEPENDENCIES_INSTALL }} \
+                -DWITH_RECORDER=ON \
+                -DBUILD_EXTERNAL_FUNCTIONS=ON \
+                -DBUILD_API_EXAMPLES=OFF \
+                -DBUILD_TESTING=OFF \
+                -DBUILD_JAVA_WRAPPING=OFF \
+                -DBUILD_PYTHON_WRAPPING=OFF \
+                ${{ env.OPENSIMADE_SOURCE }}
+
+      - name: Build and install OpenSim-AD-Core (Linux)
+        run: |
+          cd ${{ env.OPENSIMADE_CORE_BUILD }}
+          cmake --build . --config Release
+          cmake --install .
+
+      - name: Upload Linux binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: opensim-ad-core-linux
+          path: ${{ env.OPENSIMADE_CORE_INSTALL }}
+
+  
