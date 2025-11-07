@@ -3,7 +3,7 @@
 # OpenSim does not use this file directly.
 
 project(OpenSimDependencies)
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8...3.22.0)
 
 include(ExternalProject)
 include(CMakeParseArguments)
@@ -143,7 +143,7 @@ SetDefaultCMakeBuildType()
 
 AddDependency(NAME       simbody
               URL        https://github.com/Lars-DHondt-KUL/simbodyAD.git
-              TAG        09918151906c4c3b9b7c43a40047464aa351612d
+              TAG        ccce55489d5b1d9909347c514b40e31b6d6e8a1b
               CMAKE_ARGS -DBUILD_EXAMPLES:BOOL=OFF 
                          -DBUILD_TESTING:BOOL=OFF
 						 -DBUILD_DYNAMIC_LIBRARIES:BOOL=OFF
