@@ -34,6 +34,7 @@ jobs:
           cd ${{ env.OPENSIMADE_DEPENDENCIES_BUILD }}
           cmake -G "Unix Makefiles" \
                 -DCMAKE_INSTALL_PREFIX=${{ env.OPENSIMADE_DEPENDENCIES_INSTALL }} \
+                -DCMAKE_CXX_FLAGS="-std=c++14" \
                 ${{ env.OPENSIMADE_SOURCE }}/dependencies
           cmake --build . --config Release
           cmake --install .
@@ -52,6 +53,7 @@ jobs:
                 -DBUILD_TESTING=OFF \
                 -DBUILD_JAVA_WRAPPING=OFF \
                 -DBUILD_PYTHON_WRAPPING=OFF \
+                -DCMAKE_CXX_FLAGS="-std=c++14" \
                 ${{ env.OPENSIMADE_SOURCE }}
 
       - name: Build and install OpenSim-AD-Core (Linux)
