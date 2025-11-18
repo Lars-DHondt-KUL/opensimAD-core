@@ -67,7 +67,7 @@ jobs:
         run: |
           cd ${{ env.OPENSIMAD_CORE_INSTALL }}
           sleep 60
-          tar -czvf opensimad-install-linux.tar.gz lib/ include/
+          tar -czvf opensimad-install-linux.tar.gz lib/ include/ etc/
 
       - name: Upload Linux binaries
         uses: actions/upload-artifact@v4
