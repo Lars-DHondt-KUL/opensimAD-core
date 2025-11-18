@@ -6,6 +6,7 @@ set DISABLE_WARNINGS=1
 
 set CMAKE_GENERATOR="Visual Studio 15 2017 Win64"
 ::set CMAKE_GENERATOR="Visual Studio 16 2019"
+set BUILD_TYPE=Release
 
 :: set VCVARS_BAT="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Auxiliary\Build\vcvars64.bat"
 set VCVARS_BAT=
@@ -49,7 +50,7 @@ cmake -G %CMAKE_GENERATOR% ^
       -DCMAKE_INSTALL_PREFIX="%OPENSIMAD_DEPENDENCIES_INSTALL%" ^
 	  -DCMAKE_CXX_FLAGS="%CMAKE_CXX_FLAGS%" ^
       "%OPENSIMAD_SOURCE%\dependencies"
-cmake --build . --config Release
+cmake --build . --config %BUILD_TYPE%
 if %ERRORLEVEL% neq 0 (
     echo Dependency build failed.
     pause
@@ -59,7 +60,7 @@ if %ERRORLEVEL% neq 0 (
 :: Configure OpenSim-AD-Core
 echo Configuring OpenSim-AD-Core...
 mkdir "%OPENSIMAD_CORE_BUILD%" 2>nul
-mkdir "%OPENSIMAD_CORE_BUILD%\Release" 2>nul
+mkdir "%OPENSIMAD_CORE_BUILD%\%BUILD_TYPE%" 2>nul
 cd /d "%OPENSIMAD_CORE_BUILD%"
 if defined VCVARS_BAT call %VCVARS_BAT%
 cmake -G %CMAKE_GENERATOR% ^
@@ -81,8 +82,8 @@ if %ERRORLEVEL% neq 0 (
 
 :: Build and install OpenSimAD-core
 echo Building and installing OpenSimAD-core...
-cmake --build . --config Release
-cmake --install . --config Release
+cmake --build . --config %BUILD_TYPE%
+cmake --install . --config %BUILD_TYPE%
 if %ERRORLEVEL% neq 0 (
     echo OpenSimAD-core build failed.
     pause
