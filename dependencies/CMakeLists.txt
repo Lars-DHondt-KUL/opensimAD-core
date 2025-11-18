@@ -143,7 +143,7 @@ SetDefaultCMakeBuildType()
 
 AddDependency(NAME       simbody
               URL        https://github.com/Lars-DHondt-KUL/simbodyAD.git
-              TAG        ccce55489d5b1d9909347c514b40e31b6d6e8a1b
+              TAG        f18f72ce600cd2ff0fcdf1518d287e84a31f8400
               CMAKE_ARGS -DBUILD_EXAMPLES:BOOL=OFF 
                          -DBUILD_TESTING:BOOL=OFF
 						 -DBUILD_DYNAMIC_LIBRARIES:BOOL=OFF
